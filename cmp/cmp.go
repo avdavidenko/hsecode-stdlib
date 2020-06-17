@@ -32,4 +32,3 @@ func Min(values ...ValueType) ValueType {
 	}
 	return m
 }
-
