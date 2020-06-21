@@ -5,15 +5,15 @@ import "github.com/cheekybits/genny/generic"
 //go:generate genny -in=$GOFILE -out=int/dont_edit.go gen "ValueType=int"
 
 type Matrix struct {
-	Rows int // number of rows
-	Cols int // number of columns
+	Rows   int // number of rows
+	Cols   int // number of columns
 	matrix []ValueType
 }
 
 func New(n, m int) *Matrix {
 	return &Matrix{
-		Rows:	n,
-		Cols:	m,
+		Rows:   n,
+		Cols:   m,
 		matrix: make([]ValueType, m*n),
 	}
 }
@@ -31,7 +31,3 @@ func (M *Matrix) Set(i, j int, v ValueType) {
 	}
 	M.matrix[i*M.Cols+j] = v
 }
-
-
-
-
