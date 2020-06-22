@@ -19,8 +19,10 @@ func NthPrime(n int) int {
 	sieve := make([]bool, up/2)
 
 	for i := 3; i < up; i += 2 {
-		for j := i * i; j < up; j += 2 * i {
-			sieve[(j-1)/2] = true
+		if sieve[(i-1)/2] == false {
+			for j := i * i; j < up; j += 2 * i {
+				sieve[(j-1)/2] = true
+			}
 		}
 	}
 
