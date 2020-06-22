@@ -22,7 +22,7 @@ func (M *Matrix) Get(i, j int) int {
 }
 
 func (M *Matrix) Set(i, j int, v int) {
-	if i >= M.Rows || j >= M.Cols {
+	if i >= M.Rows || j >= M.Cols || i < 0 || j < 0 {
 		panic("error")
 	}
 	M.matrix[i*M.Cols+j] = v
