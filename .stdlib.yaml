@@ -4,4 +4,5 @@ tests:
   #- cmp
   #- primes
   #- matrix
-  - ndarray
+  #- ndarray
+  - maxqueue
