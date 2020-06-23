@@ -1,6 +1,7 @@
 package pick
 
 import (
+	"math/rand"
 	"sort"
 )
 
@@ -11,7 +12,9 @@ func (s IntSlice) Len() int {
 }
 
 func (s IntSlice) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
+	t := s[i]
+	s[i] = s[j]
+	s[j] = t
 }
 
 func (s IntSlice) Less(i, j int) bool {
@@ -34,7 +37,8 @@ func partitionForNth(data sort.Interface, left int, right int, pivotIndex int) i
 
 func selectForNth(data sort.Interface, left int, right int, nth int) {
 	for left < right {
-		pivotIndex := (left + right) / 2
+		pivotIndex := rand.Intn(right+1-left) + left
+		println(left, ", ", right, ", ", pivotIndex)
 		pivotIndex = partitionForNth(data, left, right, pivotIndex)
 
 		if nth == pivotIndex {
