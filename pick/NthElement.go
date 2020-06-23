@@ -33,21 +33,19 @@ func partitionForNth(data sort.Interface, left int, right int, pivotIndex int) i
 }
 
 func selectForNth(data sort.Interface, left int, right int, nth int) {
-	if left == right {
-		return
-	}
+	for left < right {
+		pivotIndex := (left + right) / 2
+		pivotIndex = partitionForNth(data, left, right, pivotIndex)
 
-	pivotIndex := (left + right) / 2
-	pivotIndex = partitionForNth(data, left, right, pivotIndex)
+		if nth == pivotIndex {
+			return
+		}
 
-	if nth == pivotIndex {
-		return
-	}
-
-	if nth < pivotIndex {
-		selectForNth(data, left, pivotIndex-1, nth)
-	} else {
-		selectForNth(data, pivotIndex+1, right, nth)
+		if nth < pivotIndex {
+			right = pivotIndex - 1
+		} else {
+			left = pivotIndex + 1
+		}
 	}
 }
 
