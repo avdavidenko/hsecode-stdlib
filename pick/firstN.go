@@ -41,8 +41,6 @@ func (h *Heap) Pop() interface{} {
 }
 
 func FirstN(data Ordered, n int) []int {
-	fmt.Println(data)
-
 	h := &Heap{data: sort.Reverse(data)}
 	heap.Init(h)
 
