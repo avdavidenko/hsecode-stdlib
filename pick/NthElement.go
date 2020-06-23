@@ -38,7 +38,6 @@ func partitionForNth(data sort.Interface, left int, right int, pivotIndex int) i
 func selectForNth(data sort.Interface, left int, right int, nth int) {
 	for left < right {
 		pivotIndex := rand.Intn(right+1-left) + left
-		println(left, ", ", right, ", ", pivotIndex)
 		pivotIndex = partitionForNth(data, left, right, pivotIndex)
 
 		if nth == pivotIndex {
