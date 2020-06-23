@@ -8,7 +8,6 @@ import (
 type Ordered interface {
 	Len() int
 	Less(i, j int) bool
-	Swap(i, j int)
 }
 
 type Heap struct {
@@ -25,7 +24,7 @@ func (h *Heap) Swap(i, j int) {
 }
 
 func (h *Heap) Less(i, j int) bool {
-	return h.data.Less(h.indices[i], h.indices[j])
+	return h.data.Less(h.indices[j], h.indices[i])
 }
 
 func (h *Heap) Push(x interface{}) {
@@ -41,12 +40,12 @@ func (h *Heap) Pop() interface{} {
 }
 
 func FirstN(data Ordered, n int) []int {
-	h := &Heap{data: sort.Reverse(data)}
+	h := &Heap{data: data}
 	heap.Init(h)
 
 	for i := 0; i < data.Len(); i++ {
 		if i >= n {
-			if h.data.Less(h.indices[0], i) {
+			if h.data.Less(i, h.indices[0]) {
 				heap.Pop(h)
 				heap.Push(h, i)
 			}
