@@ -6,4 +6,5 @@ tests:
   #- matrix
   #- ndarray
   #- maxqueue
-  - vector
+  #- vector
+  - firstn
