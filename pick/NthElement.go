@@ -52,7 +52,7 @@ func selectForNth(data sort.Interface, left int, right int, nth int) {
 }
 
 func NthElement(data sort.Interface, nth int) {
-	if nth >= data.Len() {
+	if nth >= data.Len() || nth < 0{
 		panic("Out of range")
 	}
 	selectForNth(data, 0, data.Len()-1, nth)
