@@ -2,7 +2,6 @@ package pick
 
 import (
 	"container/heap"
-	"sort"
 )
 
 type Ordered interface {
