@@ -5,4 +5,5 @@ tests:
   #- primes
   #- matrix
   #- ndarray
-  - maxqueue
+  #- maxqueue
+  - vector
