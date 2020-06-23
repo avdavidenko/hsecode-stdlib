@@ -33,7 +33,7 @@ func partitionForNth(data sort.Interface, left int, right int, pivotIndex int) i
 }
 
 func selectForNth(data sort.Interface, left int, right int, nth int) {
-	if left >= right {
+	if left == right {
 		return
 	}
 
@@ -52,5 +52,8 @@ func selectForNth(data sort.Interface, left int, right int, nth int) {
 }
 
 func NthElement(data sort.Interface, nth int) {
+	if nth >= data.Len() {
+		panic("Out of range")
+	}
 	selectForNth(data, 0, data.Len()-1, nth)
 }
