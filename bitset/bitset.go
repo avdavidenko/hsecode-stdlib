@@ -74,5 +74,5 @@ func (b *Bitset) Test(pos int) (bool, error) {
 		return false, errors.New("Out of range")
 	}
 
-	return (b.set[pos>>8]&(1<<(pos&7)) != 0), nil
+	return (b.set[pos>>3]&(1<<(pos&7)) != 0), nil
 }
