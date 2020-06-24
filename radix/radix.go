@@ -1,19 +1,20 @@
 package radix
 
-func ExtractByte(value uint64, n int) int {
-	return int((value >> (n << 3)) & 0b11111111)
-}
-
 func Sort(data []uint64) {
 	temp := make([]uint64, len(data))
 
 	source := &temp
 	target := &data
+	bins := make([]int, 257)
 	for i := 0; i < 8; i++ {
+		shift := i << 3
 		source, target = target, source
-		bins := make([]int, 257)
-		for j := 0; j < len(*source); j++ {
-			bins[ExtractByte((*source)[j], i)+1]++
+		for j := 0; j < 257; j++ {
+			bins[j] = 0
+		}
+		for _, value := range *source {
+			byteVal := int((value >> shift) & 0b11111111)
+			bins[byteVal+1]++
 		}
 
 		if bins[0] == len(*source) {
@@ -24,9 +25,9 @@ func Sort(data []uint64) {
 				bins[j] += bins[j-1]
 			}
 
-			for j := 0; j < len(*source); j++ {
-				byteVal := ExtractByte((*source)[j], i)
-				(*target)[bins[byteVal]] = (*source)[j]
+			for _, value := range *source {
+				byteVal := int((value >> shift) & 0b11111111)
+				(*target)[bins[byteVal]] = value
 				bins[byteVal]++
 			}
 		}
