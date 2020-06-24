@@ -8,4 +8,5 @@ tests:
   #- maxqueue
   #- vector
   #- firstn
-  - nthelement
+  #- nthelement
+  - radix
