@@ -5,25 +5,25 @@ import "errors"
 
 type Bitset struct {
 	length      int
-	set         []uint8
-	notUsedMask uint8
+	set         []uint64
+	notUsedMask uint64
 }
 
 func New(size int) *Bitset {
-	dataLength := size >> 3
-	remainder := size & 0x7
-	notUsedMask := uint8(0)
+	dataLength := size >> 6
+	remainder := size & 63
+	notUsedMask := uint64(0)
 	if remainder != 0 {
 		dataLength++
-		notUsedMask = 0xFF << remainder
+		notUsedMask = (^uint64(0)) << remainder
 	}
 
-	return &Bitset{length: size, set: make([]uint8, dataLength), notUsedMask: notUsedMask}
+	return &Bitset{length: size, set: make([]uint64, dataLength), notUsedMask: notUsedMask}
 }
 
 func (b *Bitset) All() bool {
 	for i := 0; i < len(b.set)-1; i++ {
-		if b.set[i] != 0xFF {
+		if b.set[i] != (^uint64(0)) {
 			return false
 		}
 	}
@@ -47,7 +47,7 @@ func (b *Bitset) Any() bool {
 func (b *Bitset) Count() int {
 	count := 0
 	for i := 0; i < len(b.set); i++ {
-		count += bits.OnesCount8(b.set[i])
+		count += bits.OnesCount64(b.set[i])
 	}
 	return count
 }
@@ -71,9 +71,9 @@ func (b *Bitset) Set(pos int, value bool) error {
 	}
 
 	if value == true {
-		b.set[pos>>3] |= 1 << (pos & 7)
+		b.set[pos>>6] |= 1 << (pos & 63)
 	} else {
-		b.set[pos>>3] &= ^(1 << (pos & 7))
+		b.set[pos>>6] &= ^(1 << (pos & 63))
 	}
 
 	return nil
@@ -84,5 +84,5 @@ func (b *Bitset) Test(pos int) (bool, error) {
 		return false, errors.New("Out of range")
 	}
 
-	return (b.set[pos>>3]&(1<<(pos&7)) != 0), nil
+	return (b.set[pos>>6]&(1<<(pos&63)) != 0), nil
 }
