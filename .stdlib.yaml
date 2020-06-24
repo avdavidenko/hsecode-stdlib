@@ -9,4 +9,5 @@ tests:
   #- vector
   #- firstn
   #- nthelement
-  - radix
+  #- radix
+  - bitset
