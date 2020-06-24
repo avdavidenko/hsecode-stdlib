@@ -22,12 +22,22 @@ func New(size int) *Bitset {
 }
 
 func (b *Bitset) All() bool {
-	return b.Count() == b.length
+	for i := 0; i < len(b.set)-1; i++ {
+		if b.set[i] != 0xFF {
+			return false
+		}
+	}
+
+	if b.set[len(b.set)-1] != ^b.notUsedMask {
+		return false
+	}
+
+	return true
 }
 
 func (b *Bitset) Any() bool {
-	for _, value := range b.set {
-		if value != 0 {
+	for i := 0; i < len(b.set); i++ {
+		if b.set[i] != 0 {
 			return true
 		}
 	}
@@ -36,8 +46,8 @@ func (b *Bitset) Any() bool {
 
 func (b *Bitset) Count() int {
 	count := 0
-	for _, value := range b.set {
-		count += bits.OnesCount8(value)
+	for i := 0; i < len(b.set); i++ {
+		count += bits.OnesCount8(b.set[i])
 	}
 	return count
 }
