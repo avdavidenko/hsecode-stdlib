@@ -20,12 +20,10 @@ func Sort(data []uint64) {
 			source, target = target, source
 		} else {
 
-			fmt.Println(bins)
 			for j := 1; j < 256; j++ {
 				bins[j] += bins[j-1]
 			}
 
-			fmt.Println(bins)
 			for j := 0; j < len(*source); j++ {
 				byteVal := ExtractByte((*source)[j], i)
 				(*target)[bins[byteVal]] = (*source)[j]
