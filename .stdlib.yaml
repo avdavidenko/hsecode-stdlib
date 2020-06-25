@@ -10,4 +10,7 @@ tests:
   #- firstn
   #- nthelement
   #- radix
-  - bitset
+  #- bitset
+  - treebalanced
+  - treeinorder
+  - treesym
