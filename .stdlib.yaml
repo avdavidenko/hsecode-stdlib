@@ -16,4 +16,5 @@ tests:
   #- treesym
   #- treenoleft
   #- treeserialise
-  - lru
+  #- lru
+  - fulltext
