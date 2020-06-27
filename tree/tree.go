@@ -81,6 +81,9 @@ func (T *Tree) noLeft() (*Tree, *Tree) {
 }
 
 func (T *Tree) NoLeft() *Tree {
+	if T == nil {
+		return T
+	}
 	root, _ := T.noLeft()
 	return root
 }
@@ -167,6 +170,9 @@ func Decode(data []string) (*Tree, error) {
 	for i := 0; i < len(nodes) && dataCounter < len(data); i++ {
 		for j := 0; j < 2 && dataCounter < len(data); j++ {
 			if nodes[i] == nil {
+				if data[dataCounter] != "nil" {
+					return nil, errors.New("Wrong format")
+				}
 				dataCounter++
 				continue
 			}
