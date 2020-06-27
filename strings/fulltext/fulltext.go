@@ -1,7 +1,5 @@
 package fulltext
 
-import "strings"
-
 type Index struct {
 	idx        map[string]([]int)
 	docsNumber int
@@ -56,15 +54,19 @@ func (idx *Index) Search(query string) []int {
 		return []int{}
 	}
 
-	words := strings.Split(query, " ")
-	if len(words) == 0 {
-		return []int{}
-	}
-
 	meets := make([]int, idx.docsNumber)
 
-	for i := 0; i < len(words); i++ {
-		docIdxes, ok := idx.idx[words[i]]
+	count := 0
+	i := 0
+	word := ""
+	for {
+		word, i = getWord(i, query)
+		if len(word) == 0 {
+			break
+		}
+
+		count++
+		docIdxes, ok := idx.idx[word]
 		if ok {
 			for j := 0; j < len(docIdxes); j++ {
 				meets[docIdxes[j]]++
@@ -73,9 +75,11 @@ func (idx *Index) Search(query string) []int {
 	}
 
 	result := make([]int, 0)
-	for i := 0; i < idx.docsNumber; i++ {
-		if meets[i] == len(words) {
-			result = append(result, i)
+	if count > 0 {
+		for i := 0; i < idx.docsNumber; i++ {
+			if meets[i] == count {
+				result = append(result, i)
+			}
 		}
 	}
 
