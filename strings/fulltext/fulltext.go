@@ -56,32 +56,40 @@ func (idx *Index) Search(query string) []int {
 		return []int{}
 	}
 
-	result := make([]int, 0)
-	for n := 0; n < idx.docsNumber; n++ {
-		i := 0
-		word := ""
-		count := 0
-		for {
-			word, i = getWord(i, query)
-			if len(word) == 0 {
-				if count > 0 {
-					result = append(result, n)
+	meets := []int{}
+
+	count := 0
+	i := 0
+	word := ""
+	for {
+		word, i = getWord(i, query)
+		if len(word) == 0 {
+			break
+		}
+
+		docIdxes, ok := idx.idx[word]
+		if !ok {
+			return []int{}
+		}
+
+		if count == 0 {
+			meets = docIdxes
+		} else {
+			for k := len(meets) - 1; k >= 0; k-- {
+				pos := sort.SearchInts(docIdxes, meets[k])
+				if pos >= len(docIdxes) || docIdxes[pos] != meets[k] {
+					if len(meets) == 1 {
+						return []int{}
+					}
+
+					copy(meets[k:], meets[k+1:])
+					meets = meets[:len(meets)-1]
 				}
-				break
-			}
-
-			count++
-			docIdxes, ok := idx.idx[word]
-			if !ok {
-				break
-			}
-
-			pos := sort.SearchInts(docIdxes, n)
-			if pos >= len(docIdxes) || docIdxes[pos] != n {
-				break
 			}
 		}
+
+		count++
 	}
 
-	return result
+	return meets
 }
