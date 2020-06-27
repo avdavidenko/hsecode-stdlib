@@ -1,5 +1,7 @@
 package fulltext
 
+import "sort"
+
 type Index struct {
 	idx        map[string]([]int)
 	docsNumber int
@@ -54,7 +56,7 @@ func (idx *Index) Search(query string) []int {
 		return []int{}
 	}
 
-	meets := make([]int, idx.docsNumber)
+	meets := make(map[int]int)
 
 	count := 0
 	i := 0
@@ -65,23 +67,36 @@ func (idx *Index) Search(query string) []int {
 			break
 		}
 
-		count++
 		docIdxes, ok := idx.idx[word]
-		if ok {
+		if !ok {
+			return []int{}
+		}
+
+		if count == 0 {
 			for j := 0; j < len(docIdxes); j++ {
-				meets[docIdxes[j]]++
+				meets[docIdxes[j]] = 1
+			}
+		} else {
+			for j := 0; j < len(docIdxes); j++ {
+				v, ok := meets[docIdxes[j]]
+				if ok {
+					meets[docIdxes[j]] = v + 1
+				}
 			}
 		}
+
+		count++
 	}
 
 	result := make([]int, 0)
 	if count > 0 {
-		for i := 0; i < idx.docsNumber; i++ {
-			if meets[i] == count {
-				result = append(result, i)
+		for key, value := range meets {
+			if value == count {
+				result = append(result, key)
 			}
 		}
 	}
 
+	sort.IntSlice(result).Sort()
 	return result
 }
