@@ -14,5 +14,5 @@ tests:
   #- treebalanced
   #- treeinorder
   #- treesym
-  - treenoleft
+  #- treenoleft
   - treeserialise
