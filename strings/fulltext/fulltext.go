@@ -56,47 +56,32 @@ func (idx *Index) Search(query string) []int {
 		return []int{}
 	}
 
-	meets := make(map[int]int)
-
-	count := 0
-	i := 0
-	word := ""
-	for {
-		word, i = getWord(i, query)
-		if len(word) == 0 {
-			break
-		}
-
-		docIdxes, ok := idx.idx[word]
-		if !ok {
-			return []int{}
-		}
-
-		if count == 0 {
-			for j := 0; j < len(docIdxes); j++ {
-				meets[docIdxes[j]] = 1
-			}
-		} else {
-			for j := 0; j < len(docIdxes); j++ {
-				v, ok := meets[docIdxes[j]]
-				if ok {
-					meets[docIdxes[j]] = v + 1
-				}
-			}
-		}
-
-		count++
-	}
-
 	result := make([]int, 0)
-	if count > 0 {
-		for key, value := range meets {
-			if value == count {
-				result = append(result, key)
+	for n := 0; n < idx.docsNumber; n++ {
+		i := 0
+		word := ""
+		count := 0
+		for {
+			word, i = getWord(i, query)
+			if len(word) == 0 {
+				if count > 0 {
+					result = append(result, n)
+				}
+				break
+			}
+
+			count++
+			docIdxes, ok := idx.idx[word]
+			if !ok {
+				break
+			}
+
+			pos := sort.SearchInts(docIdxes, n)
+			if pos >= len(docIdxes) || docIdxes[pos] != n {
+				break
 			}
 		}
 	}
 
-	sort.IntSlice(result).Sort()
 	return result
 }
