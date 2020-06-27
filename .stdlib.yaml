@@ -15,4 +15,5 @@ tests:
   #- treeinorder
   #- treesym
   #- treenoleft
-  - treeserialise
+  #- treeserialise
+  - lru
