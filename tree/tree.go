@@ -1,6 +1,8 @@
 package tree
 
 import "sort"
+import "strconv"
+import "errors"
 
 type Tree struct {
 	Value int
@@ -61,6 +63,28 @@ func fromSorted(unique []int) *Tree {
 	return &Tree{Value: unique[med], Left: fromSorted(unique[:med]), Right: fromSorted(unique[med+1:])}
 }
 
+func (T *Tree) noLeft() (*Tree, *Tree) {
+	end := T
+	if T.Right != nil {
+		T.Right, end = T.Right.noLeft()
+	}
+
+	if T.Left == nil {
+		return T, end
+	}
+
+	root, toInsert := T.Left.noLeft()
+	T.Left = nil
+	toInsert.Right = T
+
+	return root, end
+}
+
+func (T *Tree) NoLeft() *Tree {
+	root, _ := T.noLeft()
+	return root
+}
+
 func isMirror(T1, T2 *Tree) bool {
 	if T1 == nil && T2 == nil {
 		return true
@@ -75,4 +99,99 @@ func isMirror(T1, T2 *Tree) bool {
 	}
 
 	return isMirror(T1.Left, T2.Right) && isMirror(T1.Right, T2.Left)
+}
+
+func (T *Tree) Encode() []string {
+	nodeCount := 0
+	T.InOrder(func(node *Tree) { nodeCount++ })
+	if nodeCount <= 0 {
+		return make([]string, 0)
+	}
+
+	nodes := make([](*Tree), 1, nodeCount)
+	nodes[0] = T
+	nodeCount--
+	for i := 0; i < len(nodes) && nodeCount > 0; i++ {
+		if nodes[i] == nil {
+			nodes = append(nodes, nil)
+			nodes = append(nodes, nil)
+			continue
+		}
+
+		if nodes[i].Left != nil {
+			nodes = append(nodes, nodes[i].Left)
+			nodeCount--
+		} else {
+			nodes = append(nodes, nil)
+		}
+
+		if nodeCount <= 0 {
+			continue
+		}
+
+		if nodes[i].Right != nil {
+			nodes = append(nodes, nodes[i].Right)
+			nodeCount--
+		} else {
+			nodes = append(nodes, nil)
+		}
+	}
+
+	result := make([]string, 0, len(nodes))
+	for _, v := range nodes {
+		if v == nil {
+			result = append(result, "nil")
+		} else {
+			result = append(result, strconv.Itoa(v.Value))
+		}
+
+	}
+	return result
+}
+
+func Decode(data []string) (*Tree, error) {
+	if len(data) == 0 {
+		return nil, nil
+	}
+
+	nodes := make([](*Tree), 1, len(data))
+	if data[0] == "nil" {
+		return nil, errors.New("Wrong format")
+	}
+	value, err := strconv.Atoi(data[0])
+	if err != nil {
+		return nil, err
+	}
+	nodes[0] = &Tree{Value: value}
+	dataCounter := 1
+	for i := 0; i < len(nodes) && dataCounter < len(data); i++ {
+		for j := 0; j < 2 && dataCounter < len(data); j++ {
+			if nodes[i] == nil {
+				dataCounter++
+				continue
+			}
+
+			if data[dataCounter] == "nil" {
+				nodes = append(nodes, nil)
+				dataCounter++
+				continue
+			}
+
+			value, err := strconv.Atoi(data[dataCounter])
+			if err != nil {
+				return nil, err
+			}
+
+			newNode := &Tree{Value: value}
+			if j == 0 {
+				nodes[i].Left = newNode
+			} else {
+				nodes[i].Right = newNode
+			}
+			nodes = append(nodes, newNode)
+			dataCounter++
+		}
+	}
+
+	return nodes[0], nil
 }
