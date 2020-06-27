@@ -58,7 +58,7 @@ func (idx *Index) Search(query string) []int {
 
 	meets := []int{}
 
-	count := 0
+	firstTime := true
 	i := 0
 	word := ""
 	for {
@@ -72,8 +72,10 @@ func (idx *Index) Search(query string) []int {
 			return []int{}
 		}
 
-		if count == 0 {
-			meets = docIdxes
+		if firstTime {
+			meets = make([]int, len(docIdxes))
+			copy(meets, docIdxes)
+			firstTime = false
 		} else {
 			for k := len(meets) - 1; k >= 0; k-- {
 				pos := sort.SearchInts(docIdxes, meets[k])
@@ -87,8 +89,6 @@ func (idx *Index) Search(query string) []int {
 				}
 			}
 		}
-
-		count++
 	}
 
 	return meets
