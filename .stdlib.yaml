@@ -11,6 +11,8 @@ tests:
   #- nthelement
   #- radix
   #- bitset
-  - treebalanced
-  - treeinorder
-  - treesym
+  #- treebalanced
+  #- treeinorder
+  #- treesym
+  - treenoleft
+  - treeserialise
