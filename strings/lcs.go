@@ -32,7 +32,6 @@ func backtrack(matrix [][]int, s1, s2 string, i, j int) string {
 }
 
 func lcs(s1, s2 string) string {
-	fmt.Println(s1, len(s1), s2, len(s2))
 	if len(s1) == 0 || len(s2) == 0 {
 		return ""
 	}
@@ -71,7 +70,6 @@ func LCS(s1, s2 string) string {
 		s2 = s2[prefix:]
 	}
 
-	fmt.Println(prefixStr, len(prefixStr), s1, len(s1), s2, len(s2))
 	suffix := 0
 	for suffix < minLen && s1[len(s1)-1-suffix] == s2[len(s2)-1-suffix] {
 		suffix++
@@ -82,8 +80,6 @@ func LCS(s1, s2 string) string {
 		s1 = s1[:len(s1)-suffix]
 		s2 = s2[:len(s2)-suffix]
 	}
-
-	fmt.Println(suffixStr, len(prefixStr), s1, len(s1), s2, len(s2))
 
 	return prefixStr + lcs(s1, s2) + suffixStr
 }
