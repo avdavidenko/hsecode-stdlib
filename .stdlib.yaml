@@ -17,4 +17,5 @@ tests:
   #- treenoleft
   #- treeserialise
   #- lru
-  - fulltext
+  #- fulltext
+  - lcs
