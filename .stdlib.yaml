@@ -18,4 +18,6 @@ tests:
   #- treeserialise
   #- lru
   #- fulltext
-  - lcs
+  #- lcs
+  - listsort
+  - levenshtein
