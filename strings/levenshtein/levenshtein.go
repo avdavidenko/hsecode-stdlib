@@ -1,5 +1,7 @@
 package levenshtein
 
+import "strings"
+
 type Levenshtein struct {
 	distance   int
 	transcript string
@@ -62,7 +64,6 @@ func makeTranscript(src, dst string) (int, string) {
 	srcLen := len(src)
 	dstLen := len(dst)
 
-	fmt.Println(src, dst)
 	if srcLen == 0 && dstLen == 0 {
 		return 0, ""
 	}
@@ -89,7 +90,6 @@ func makeTranscript(src, dst string) (int, string) {
 		}
 	}
 
-	fmt.Println(matrix)
 	return matrix[srcLen][dstLen], backtraceTranscript(srcLen, dstLen, matrix)
 }
 
