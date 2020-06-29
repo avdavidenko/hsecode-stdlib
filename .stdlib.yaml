@@ -19,5 +19,5 @@ tests:
   #- lru
   #- fulltext
   #- lcs
-  - listsort
+  #- listsort
   - levenshtein
